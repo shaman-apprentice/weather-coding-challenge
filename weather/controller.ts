@@ -17,19 +17,21 @@ export const controller = (weatherRepository: Repository<Weather>) => {
 
       if (
         day &&
-        day.match(/^\d4-\d2-\d2$/) &&
+        day.match(/^\d{4}-\d{2}-\d{2}$/) &&
         new Date(day).toString() !== 'invalid Date'
       ) {
-        res.json(weather.getWeatherOfDay(new Date(day), city));
+        weather.getWeatherOfDay(new Date(day), city).then(weatherOfDay => {
+          res.json(weatherOfDay);
+        });
         return;
       }
 
       if (
         month &&
-        month.match(/^\d4-\d2$/) &&
+        month.match(/^\d{4}-\d{2}$/) &&
         new Date(month).toString() !== 'invalid Date'
       ) {
-        res.json(weather.getWeatherOfMonth(new Date(day), city));
+        res.json(weather.getWeatherOfMonth(new Date(month), city));
         return;
       }
 

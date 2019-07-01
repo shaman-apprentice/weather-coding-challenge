@@ -1,5 +1,5 @@
 CREATE TABLE weather (
-  id INT PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   city TEXT,
   time INT,
   temp FLOAT,

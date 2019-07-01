@@ -4,6 +4,7 @@ import express from 'express';
 
 import { Weather } from './weather/weather.model';
 import { router as weatherRouter } from './weather';
+import { getWeatherData } from './get-weather-data';
 
 (async function main() {
   const options: ConnectionOptions = {
@@ -15,9 +16,15 @@ import { router as weatherRouter } from './weather';
   const connection = await createConnection(options);
   const weatherRepository = connection.getRepository(Weather);
 
+  const weatherData = await getWeatherData('Berlin');
+  const weather = new Weather('Berlin', weatherData.temp, weatherData.humidity);
+  await weatherRepository.save(weather);
+
   setInterval(async () => {
-    // get and save weather data
-  }, 1000 * 60 * 60);
+    const weatherData = await getWeatherData('Berlin');
+    const weather = new Weather('Berlin', weatherData.temp, weatherData.humidity);
+    await weatherRepository.save(weather);
+  }, 1000 * 60 * 10); // 10 min interval for testing, as the weather data is supposed to be updated each 10 mins on api.openweathermap.org
 
   const app: express.Application = express();
 
