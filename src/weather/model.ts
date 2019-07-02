@@ -2,6 +2,11 @@ import { Repository } from 'typeorm';
 import { Weather } from './weather.model';
 
 export const model = (weatherRepository: Repository<Weather>) => ({
-  getWeatherOfDay(day: Date, city: string) {},
+  async getWeatherOfDay(day: Date, city: string) {
+    return {
+      temp: 0,
+      humidity: 0,
+    };
+  },
   getWeatherOfMonth(month: Date, city: string) {},
 });

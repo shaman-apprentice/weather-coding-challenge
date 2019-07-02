@@ -14,6 +14,12 @@ Die Applikation basiert auf Node.js und Express
 sqlite3 db/db.sqlite3 < db/db.sql
 ```
 
+- Test-Datenbank erstellen für die tests (`npm test`)
+
+```
+sqlite3 test/test-db.sqlite3 < db/db.sql
+```
+
 ## Aufgaben
 
 - Holen Sie einmal pro Stunde die Wetterdaten von München, Berlin und Frankfurt von https://openweathermap.org ab.
