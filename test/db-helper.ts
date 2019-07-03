@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { ConnectionOptions, createConnection, Connection } from 'typeorm';
+import { ConnectionOptions, createConnection, Connection, Repository } from 'typeorm';
 
 import { Weather } from '../src/weather/weather.model';
 
@@ -16,7 +16,7 @@ let connection : Connection;
 /*
  * @return Repository<Weather> - returns a Repository<Weather> from a fresh test db
  */
-export const getWeatherRepository = async () => {
+export async function getWeatherRepository(): Promise<Repository<Weather>> {
   if (connection && connection.isConnected) 
     await connection.close(); 
   

@@ -27,8 +27,6 @@ export class Weather extends BaseEntity {
 }
 
 export interface WeatherResponse {
-  main: {
-    temp: number;
-    humidity: number;
-  };
+  temp?: number;
+  humidity?: number;
 }
