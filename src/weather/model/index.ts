@@ -2,11 +2,14 @@ import { Repository, Between } from 'typeorm';
 import { Weather, WeatherResponse } from '../weather.model';
 
 export const model = (weatherRepository: Repository<Weather>) => ({
-  async getWeatherOfDay(day: Date, city: string) {
+  async getWeatherOfDay(day: Date, city: string): Promise<WeatherResponse> {
     const weatherData = await queryByDayAndCity(weatherRepository, day, city);
     return calcAvg(weatherData);
   },
-  getWeatherOfMonth(month: Date, city: string) {},
+  async getWeatherOfMonth(month: Date, city: string): Promise<WeatherResponse> {
+    const weatherData = await queryByMonthAndCity(weatherRepository, month, city);
+    return calcAvg(weatherData);
+  },
 });
 
 export function queryByDayAndCity(weatherRepository: Repository<Weather>, day: Date, city: string): Promise<Weather[]> {
@@ -17,6 +20,19 @@ export function queryByDayAndCity(weatherRepository: Repository<Weather>, day: D
     where: {
       city,
       time: Between(startOfDay, endOfDay),
+    }
+  });
+}
+
+export function queryByMonthAndCity(weatherRepository: Repository<Weather>, month: Date, city: string): Promise<Weather[]> {
+  const startOfMonth = (new Date(month.getFullYear(), month.getMonth())).getTime();
+  const nextMonth = new Date(month.getFullYear(), month.getMonth() + 1);
+  const endOfMonth = nextMonth.getTime() - 1;
+
+  return weatherRepository.find({
+    where: {
+      city,
+      time: Between(startOfMonth, endOfMonth),
     }
   });
 }
