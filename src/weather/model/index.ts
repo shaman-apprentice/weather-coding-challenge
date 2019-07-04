@@ -2,11 +2,11 @@ import { Repository, Between } from 'typeorm';
 import { Weather, WeatherResponse } from '../weather.model';
 
 export const model = (weatherRepository: Repository<Weather>) => ({
-  async getWeatherOfDay(day: Date, city: string): Promise<WeatherResponse> {
+  async getWeatherOfDay(day: Date, city: string) {
     const weatherData = await queryByDayAndCity(weatherRepository, day, city);
     return calcAvg(weatherData);
   },
-  async getWeatherOfMonth(month: Date, city: string): Promise<WeatherResponse> {
+  async getWeatherOfMonth(month: Date, city: string) {
     const weatherData = await queryByMonthAndCity(weatherRepository, month, city);
     return calcAvg(weatherData);
   },
@@ -37,7 +37,7 @@ export function queryByMonthAndCity(weatherRepository: Repository<Weather>, mont
   });
 }
 
-export function calcAvg(weatherData : Weather[]): WeatherResponse {
+export function calcAvg(weatherData : Weather[]) {
   if (weatherData.length === 0)
     return { temp: undefined, humidity: undefined };
 
