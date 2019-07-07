@@ -1,29 +1,22 @@
-import 'reflect-metadata';
-import { ConnectionOptions, createConnection } from 'typeorm';
-import express from 'express';
-
+import { Config as IServerConfig, startServer } from './server';
 import { Weather } from './weather/weather.model';
-import { router as weatherRouter } from './weather';
+import { openWeatherAPIKey } from './open-weather-api-key';
+
 
 (async function main() {
-  const options: ConnectionOptions = {
-    type: 'sqlite',
-    database: './db/db.sqlite3',
-    entities: [Weather],
-    logging: true,
+  const config: IServerConfig = {
+    cities: ['Berlin', 'Frankfurt', 'Munich'] as const,
+    poll_interval: 1000 * 60 * 5,
+    openWeatherAPIKey,
+    connectionOptions: {
+      type: 'sqlite',
+      database: './db/db.sqlite3',
+      entities: [Weather],
+      logging: true,
+    },
+    port: 8080,
   };
-  const connection = await createConnection(options);
-  const weatherRepository = connection.getRepository(Weather);
 
-  setInterval(async () => {
-    // get and save weather data
-  }, 1000 * 60 * 60);
-
-  const app: express.Application = express();
-
-  app.use('/weather', weatherRouter(weatherRepository));
-
-  app.listen(8080, () =>
-    console.log('Server is listening to http://localhost:8080'),
-  );
+  await startServer(config);
+  console.log('Server is listening to http://localhost:8080');
 })();
